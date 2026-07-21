@@ -26,7 +26,7 @@ Substituir o controle manual de autores, livros, clientes e empréstimos por uma
 
 1. Clone o repositório:
    ```bash
-   git clone <url-do-repositorio>
+   git clone [ https://github.com/LucianoRicardoGarciasErthal/bookstore-manager-cli ]
    cd bookstore-manager-cli
    ```
 
@@ -214,11 +214,9 @@ Data prevista de devolução (AAAA-MM-DD) (opcional):
 ✅ Empréstimo registrado com sucesso! (id: 1)
 ```
 
-## 👥 Integrantes da equipe
+## 👥 Autor
 
-- [Nome do(a) integrante 1]
-- [Nome do(a) integrante 2] *(se aplicável)*
-- [Nome do(a) integrante 3] *(se aplicável)*
+- Luciano Ricardo Garcias Erthal — [ https://github.com/LucianoRicardoGarciasErthal ]
 
 ## 🔗 Link do Kanban
 
@@ -230,6 +228,26 @@ Data prevista de devolução (AAAA-MM-DD) (opcional):
 
 ## 🌳 Fluxo de versionamento (Git/GitHub)
 
-Branches utilizadas: `main`, `develop`, `feat/autores`, `feat/livros`, `feat/clientes`, `feat/emprestimos`, `docs/readme`.
+O projeto seguiu o modelo **GitFlow** para organização do versionamento, com as seguintes branches:
 
-Fluxo: branch específica → `develop` → (ao final) `main`, com commits semânticos (`feat:`, `fix:`, `refactor:`, `docs:`, `style:`).
+### Branches utilizadas
+
+| Branch | Descrição |
+|--------|-----------|
+| `main` | Branch principal com o código em produção (versão estável) |
+| `develop` | Branch de desenvolvimento com as últimas funcionalidades integradas |
+| `feat/autores` | Implementação do CRUD de autores |
+| `feat/livros` | Implementação do CRUD de livros |
+| `feat/clientes` | Implementação do CRUD de clientes |
+| `feat/emprestimos` | Implementação de empréstimos e devoluções |
+| `feat/relatorios` | Implementação dos relatórios gerenciais |
+| `docs/readme` | Documentação do projeto |
+
+---
+
+### Fluxo de trabalho
+
+1. **Criação da branch de funcionalidade** a partir da `develop`:
+   ```bash
+   git checkout develop
+   git checkout -b feat/nova-funcionalidade
