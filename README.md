@@ -26,7 +26,7 @@ Substituir o controle manual de autores, livros, clientes e empréstimos por uma
 
 1. Clone o repositório:
    ```bash
-   git clone <url-do-repositorio>
+   git clone <https://github.com/LucianoRicardoGarciasErthal/bookstore-manager-cli>
    cd bookstore-manager-cli
    ```
 
@@ -216,9 +216,7 @@ Data prevista de devolução (AAAA-MM-DD) (opcional):
 
 ## 👥 Autor
 
-- [Nome do(a) integrante 1]
-- [Nome do(a) integrante 2] *(se aplicável)*
-- [Nome do(a) integrante 3] *(se aplicável)*
+Luciano Ricardo Garcias Erthal [ https://github.com/LucianoRicardoGarciasErthal ]
 
 ## 🔗 Link do Kanban
 
