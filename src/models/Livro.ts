@@ -5,7 +5,7 @@ export interface Livro {
   ano_publicacao?: number;
   quantidade_total: number;
   quantidade_disponivel: number;
-  autor_id: number;
+  id_autor: number;  // <-- CORRIGIDO
   criado_em?: Date;
 }
 
@@ -14,7 +14,7 @@ export interface LivroInput {
   genero?: string;
   ano_publicacao?: number;
   quantidade_total: number;
-  autor_id: number;
+  id_autor: number;  // <-- CORRIGIDO
 }
 
 /**
@@ -32,7 +32,7 @@ export class LivroModel implements Livro {
   ano_publicacao?: number;
   quantidade_total: number;
   quantidade_disponivel: number;
-  autor_id: number;
+  id_autor: number;  // <-- CORRIGIDO
   criado_em?: Date;
 
   constructor(dados: Livro) {
@@ -42,7 +42,7 @@ export class LivroModel implements Livro {
     this.ano_publicacao = dados.ano_publicacao;
     this.quantidade_total = dados.quantidade_total;
     this.quantidade_disponivel = dados.quantidade_disponivel;
-    this.autor_id = dados.autor_id;
+    this.id_autor = dados.id_autor;  // <-- CORRIGIDO
     this.criado_em = dados.criado_em;
   }
 

@@ -10,7 +10,7 @@ export class RelatorioRepository {
     const query = `
       SELECT l.id, l.titulo, a.nome AS autor, l.quantidade_disponivel
       FROM livros l
-      INNER JOIN autores a ON a.id = l.autor_id
+      INNER JOIN autores a ON a.id = l.id_autor
       WHERE l.quantidade_disponivel > 0
       ORDER BY l.titulo ASC;
     `;
@@ -22,9 +22,9 @@ export class RelatorioRepository {
     const query = `
       SELECT DISTINCT l.id, l.titulo, a.nome AS autor
       FROM emprestimos e
-      INNER JOIN livros l ON l.id = e.livro_id
-      INNER JOIN autores a ON a.id = l.autor_id
-      WHERE e.status = 'ATIVO'
+      INNER JOIN livros l ON l.id = e.id_livro
+      INNER JOIN autores a ON a.id = l.id_autor
+      WHERE e.status = 'ativo'
       ORDER BY l.titulo ASC;
     `;
     const resultado = await pool.query(query);
@@ -35,7 +35,7 @@ export class RelatorioRepository {
     const query = `
       SELECT a.nome AS autor, COUNT(l.id) AS total_livros
       FROM autores a
-      LEFT JOIN livros l ON l.autor_id = a.id
+      LEFT JOIN livros l ON l.id_autor = a.id
       GROUP BY a.nome
       ORDER BY total_livros DESC;
     `;
@@ -47,7 +47,7 @@ export class RelatorioRepository {
     const query = `
       SELECT l.titulo, COUNT(e.id) AS total_emprestimos
       FROM livros l
-      LEFT JOIN emprestimos e ON e.livro_id = l.id
+      LEFT JOIN emprestimos e ON e.id_livro = l.id
       GROUP BY l.titulo
       ORDER BY total_emprestimos DESC
       LIMIT $1;
@@ -60,8 +60,8 @@ export class RelatorioRepository {
     const query = `
       SELECT c.nome, c.email, COUNT(e.id) AS emprestimos_ativos
       FROM clientes c
-      INNER JOIN emprestimos e ON e.cliente_id = c.id
-      WHERE e.status = 'ATIVO'
+      INNER JOIN emprestimos e ON e.id_cliente = c.id
+      WHERE e.status = 'ativo'
       GROUP BY c.nome, c.email
       ORDER BY emprestimos_ativos DESC;
     `;
@@ -76,8 +76,9 @@ export class RelatorioRepository {
     const query = `
       SELECT a.nome AS autor, COUNT(e.id) AS total_emprestimos
       FROM emprestimos e
-      INNER JOIN livros l ON l.id = e.livro_id
-      INNER JOIN autores a ON a.id = l.autor_id
+      INNER JOIN livros l ON l.id = e.id_livro
+      INNER JOIN autores a ON a.id = l.id_autor
+      WHERE e.status = 'ativo'
       GROUP BY a.nome
       ORDER BY total_emprestimos DESC
       LIMIT $1;

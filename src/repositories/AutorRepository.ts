@@ -48,7 +48,8 @@ export class AutorRepository {
   }
 
   async possuiLivrosVinculados(id: number): Promise<boolean> {
-    const query = `SELECT 1 FROM livros WHERE autor_id = $1 LIMIT 1;`;
+    // CORRIGIDO: 'autor_id' → 'id_autor'
+    const query = `SELECT 1 FROM livros WHERE id_autor = $1 LIMIT 1;`;
     const resultado = await pool.query(query, [id]);
     return (resultado.rowCount ?? 0) > 0;
   }
