@@ -8,7 +8,7 @@ import { Livro, LivroInput, LivroComAutor } from "../models/Livro";
 export class LivroRepository {
   async criar(dados: LivroInput): Promise<Livro> {
     const query = `
-      INSERT INTO livros (titulo, genero, ano_publicacao, quantidade_total, quantidade_disponivel, autor_id)
+      INSERT INTO livros (titulo, genero, ano_publicacao, quantidade_total, quantidade_disponivel, id_autor)
       VALUES ($1, $2, $3, $4, $4, $5)
       RETURNING *;
     `;
@@ -17,7 +17,7 @@ export class LivroRepository {
       dados.genero ?? null,
       dados.ano_publicacao ?? null,
       dados.quantidade_total,
-      dados.autor_id,
+      dados.id_autor,  // <-- CORRIGIDO
     ];
     const resultado = await pool.query<Livro>(query, valores);
     return resultado.rows[0];
@@ -27,7 +27,7 @@ export class LivroRepository {
     const query = `
       SELECT l.*, a.nome AS autor_nome
       FROM livros l
-      INNER JOIN autores a ON a.id = l.autor_id
+      INNER JOIN autores a ON a.id = l.id_autor
       ORDER BY l.titulo ASC;
     `;
     const resultado = await pool.query<LivroComAutor>(query);
@@ -38,7 +38,7 @@ export class LivroRepository {
     const query = `
       SELECT l.*, a.nome AS autor_nome
       FROM livros l
-      INNER JOIN autores a ON a.id = l.autor_id
+      INNER JOIN autores a ON a.id = l.id_autor
       WHERE l.id = $1;
     `;
     const resultado = await pool.query<LivroComAutor>(query, [id]);
@@ -48,11 +48,17 @@ export class LivroRepository {
   async atualizar(id: number, dados: LivroInput): Promise<Livro | null> {
     const query = `
       UPDATE livros
-      SET titulo = $1, genero = $2, ano_publicacao = $3, autor_id = $4
+      SET titulo = $1, genero = $2, ano_publicacao = $3, id_autor = $4
       WHERE id = $5
       RETURNING *;
     `;
-    const valores = [dados.titulo, dados.genero ?? null, dados.ano_publicacao ?? null, dados.autor_id, id];
+    const valores = [
+      dados.titulo,
+      dados.genero ?? null,
+      dados.ano_publicacao ?? null,
+      dados.id_autor,  // <-- CORRIGIDO
+      id,
+    ];
     const resultado = await pool.query<Livro>(query, valores);
     return resultado.rows[0] ?? null;
   }
@@ -82,7 +88,7 @@ export class LivroRepository {
   }
 
   async possuiEmprestimosVinculados(id: number): Promise<boolean> {
-    const query = `SELECT 1 FROM emprestimos WHERE livro_id = $1 LIMIT 1;`;
+    const query = `SELECT 1 FROM emprestimos WHERE id_livro = $1 LIMIT 1;`;
     const resultado = await pool.query(query, [id]);
     return (resultado.rowCount ?? 0) > 0;
   }

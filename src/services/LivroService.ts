@@ -20,10 +20,10 @@ export class LivroService {
     }
 
     // Regra de negócio: livro deve estar vinculado a um autor existente
-    const autor = await this.autorRepository.buscarPorId(dados.autor_id);
+    const autor = await this.autorRepository.buscarPorId(dados.id_autor);  // <-- CORRIGIDO
     if (!autor) {
       throw new AppError(
-        `Autor com id ${dados.autor_id} não encontrado. Cadastre o autor antes de vincular o livro.`
+        `Autor com id ${dados.id_autor} não encontrado. Cadastre o autor antes de vincular o livro.`  // <-- CORRIGIDO
       );
     }
   }

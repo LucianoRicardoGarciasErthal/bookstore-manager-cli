@@ -13,14 +13,14 @@ export class LivroController {
       const genero = await InputHelper.textoOpcional("Gênero");
       const ano_publicacao = await InputHelper.inteiroOpcional("Ano de publicação");
       const quantidade_total = await InputHelper.inteiro("Quantidade de exemplares");
-      const autor_id = await InputHelper.inteiro("ID do autor");
+      const id_autor = await InputHelper.inteiro("ID do autor");  // <-- CORRIGIDO
 
       const livro = await this.service.cadastrar({
         titulo: titulo_livro,
         genero,
         ano_publicacao,
         quantidade_total,
-        autor_id,
+        id_autor,  // <-- CORRIGIDO
       });
       console.log(`\n✅ Livro cadastrado com sucesso! (id: ${livro.id})`);
     } catch (error) {
@@ -81,14 +81,14 @@ export class LivroController {
       const titulo_livro = await InputHelper.texto("Novo título");
       const genero = await InputHelper.textoOpcional("Novo gênero");
       const ano_publicacao = await InputHelper.inteiroOpcional("Novo ano de publicação");
-      const autor_id = await InputHelper.inteiro("ID do autor");
+      const id_autor = await InputHelper.inteiro("ID do autor");  // <-- CORRIGIDO
 
       const atualizado = await this.service.atualizar(id, {
         titulo: titulo_livro,
         genero,
         ano_publicacao,
         quantidade_total: 0, // não utilizado no update (mantém o campo do tipo LivroInput)
-        autor_id,
+        id_autor,  // <-- CORRIGIDO
       });
       console.log(`\n✅ Livro atualizado com sucesso! (id: ${atualizado.id})`);
     } catch (error) {
