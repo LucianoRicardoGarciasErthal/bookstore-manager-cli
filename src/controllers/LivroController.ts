@@ -13,14 +13,26 @@ export class LivroController {
       const genero = await InputHelper.textoOpcional("Gênero");
       const ano_publicacao = await InputHelper.inteiroOpcional("Ano de publicação");
       const quantidade_total = await InputHelper.inteiro("Quantidade de exemplares");
-      const id_autor = await InputHelper.inteiro("ID do autor");  // <-- CORRIGIDO
+      const id_autor = await InputHelper.inteiro("ID do autor");
+
+      // ✅ VALIDAÇÃO DE NaN
+      if (isNaN(quantidade_total) || quantidade_total <= 0) {
+        console.log("⚠️  Quantidade inválida. Deve ser um número positivo.");
+        await InputHelper.pausar();
+        return;
+      }
+      if (isNaN(id_autor) || id_autor <= 0) {
+        console.log("⚠️  ID do autor inválido. Deve ser um número positivo.");
+        await InputHelper.pausar();
+        return;
+      }
 
       const livro = await this.service.cadastrar({
         titulo: titulo_livro,
         genero,
         ano_publicacao,
         quantidade_total,
-        id_autor,  // <-- CORRIGIDO
+        id_autor,
       });
       console.log(`\n✅ Livro cadastrado com sucesso! (id: ${livro.id})`);
     } catch (error) {
@@ -57,6 +69,14 @@ export class LivroController {
     console.log(titulo("Consultar Livro por ID"));
     try {
       const id = await InputHelper.inteiro("Informe o ID do livro");
+      
+      // ✅ VALIDAÇÃO DE NaN
+      if (isNaN(id) || id <= 0) {
+        console.log("⚠️  ID inválido. Deve ser um número positivo.");
+        await InputHelper.pausar();
+        return;
+      }
+
       const livro = await this.service.buscarPorId(id);
       console.log(linhaSeparadora());
       console.log(`ID: ${livro.id}`);
@@ -76,19 +96,40 @@ export class LivroController {
     console.log(titulo("Atualizar Livro"));
     try {
       const id = await InputHelper.inteiro("Informe o ID do livro a ser atualizado");
+      
+      // ✅ VALIDAÇÃO DE NaN
+      if (isNaN(id) || id <= 0) {
+        console.log("⚠️  ID inválido. Deve ser um número positivo.");
+        await InputHelper.pausar();
+        return;
+      }
+
       await this.service.buscarPorId(id);
 
       const titulo_livro = await InputHelper.texto("Novo título");
       const genero = await InputHelper.textoOpcional("Novo gênero");
       const ano_publicacao = await InputHelper.inteiroOpcional("Novo ano de publicação");
-      const id_autor = await InputHelper.inteiro("ID do autor");  // <-- CORRIGIDO
+      const quantidade_total = await InputHelper.inteiro("Nova quantidade total");
+      const id_autor = await InputHelper.inteiro("ID do autor");
+
+      // ✅ VALIDAÇÃO DE NaN
+      if (isNaN(quantidade_total) || quantidade_total < 0) {
+        console.log("⚠️  Quantidade inválida. Deve ser um número maior ou igual a zero.");
+        await InputHelper.pausar();
+        return;
+      }
+      if (isNaN(id_autor) || id_autor <= 0) {
+        console.log("⚠️  ID do autor inválido. Deve ser um número positivo.");
+        await InputHelper.pausar();
+        return;
+      }
 
       const atualizado = await this.service.atualizar(id, {
         titulo: titulo_livro,
         genero,
         ano_publicacao,
-        quantidade_total: 0, // não utilizado no update (mantém o campo do tipo LivroInput)
-        id_autor,  // <-- CORRIGIDO
+        quantidade_total,
+        id_autor,
       });
       console.log(`\n✅ Livro atualizado com sucesso! (id: ${atualizado.id})`);
     } catch (error) {
@@ -101,6 +142,14 @@ export class LivroController {
     console.log(titulo("Remover Livro"));
     try {
       const id = await InputHelper.inteiro("Informe o ID do livro a ser removido");
+      
+      // ✅ VALIDAÇÃO DE NaN
+      if (isNaN(id) || id <= 0) {
+        console.log("⚠️  ID inválido. Deve ser um número positivo.");
+        await InputHelper.pausar();
+        return;
+      }
+
       const livro = await this.service.buscarPorId(id);
 
       const confirmar = await InputHelper.confirmar(`Remover o livro "${livro.titulo}"?`);
