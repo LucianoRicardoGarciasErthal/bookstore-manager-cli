@@ -1,4 +1,3 @@
-faça a correção:
 import { EmprestimoService } from "../services/EmprestimoService";
 import { InputHelper } from "../utils/inputHelper";
 import { formatarData, linhaSeparadora, titulo } from "../utils/formatters";
@@ -10,15 +9,35 @@ export class EmprestimoController {
   async registrarEmprestimo(): Promise<void> {
     console.log(titulo("Registrar Empréstimo"));
     try {
-      const livro_id = await InputHelper.inteiro("ID do livro");
-      const cliente_id = await InputHelper.inteiro("ID do cliente");
+      const id_livro = await InputHelper.inteiro("ID do livro");
+
+      if (isNaN(id_livro) || id_livro <= 0) {
+        console.log("⚠️  ID do livro inválido. Deve ser um número positivo.");
+        await InputHelper.pausar();
+        return;
+      }
+
+      const id_cliente = await InputHelper.inteiro("ID do cliente");
+
+      if (isNaN(id_cliente) || id_cliente <= 0) {
+        console.log("⚠️  ID do cliente inválido. Deve ser um número positivo.");
+        await InputHelper.pausar();
+        return;
+      }
+
       const data_devolucao_prevista = await InputHelper.textoOpcional(
         "Data prevista de devolução (AAAA-MM-DD)"
       );
 
+      if (data_devolucao_prevista && !/^\d{4}-\d{2}-\d{2}$/.test(data_devolucao_prevista)) {
+        console.log("⚠️  Formato de data inválido. Use AAAA-MM-DD (ex: 2024-12-31).");
+        await InputHelper.pausar();
+        return;
+      }
+
       const emprestimo = await this.service.registrarEmprestimo({
-        livro_id,
-        cliente_id,
+        id_livro,
+        id_cliente,
         data_devolucao_prevista,
       });
       console.log(`\n✅ Empréstimo registrado com sucesso! (id: ${emprestimo.id})`);
@@ -32,6 +51,13 @@ export class EmprestimoController {
     console.log(titulo("Registrar Devolução"));
     try {
       const id = await InputHelper.inteiro("Informe o ID do empréstimo");
+
+      if (isNaN(id) || id <= 0) {
+        console.log("⚠️  ID inválido. Deve ser um número positivo.");
+        await InputHelper.pausar();
+        return;
+      }
+
       await this.service.registrarDevolucao(id);
       console.log("\n✅ Devolução registrada com sucesso!");
     } catch (error) {
