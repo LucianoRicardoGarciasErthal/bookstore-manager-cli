@@ -1,18 +1,21 @@
-export type StatusEmprestimo = "ATIVO" | "DEVOLVIDO";
+// ✅ CORRIGIDO: status agora usa 'ativo' e 'finalizado' para alinhar com o schema SQL
+export type StatusEmprestimo = "ativo" | "finalizado";
 
+// ✅ CORRIGIDO: livro_id → id_livro, cliente_id → id_cliente
 export interface Emprestimo {
   id: number;
-  livro_id: number;
-  cliente_id: number;
+  id_livro: number;           // era 'livro_id'
+  id_cliente: number;         // era 'cliente_id'
   data_emprestimo: Date;
   data_devolucao_prevista?: string;
   data_devolucao?: Date | null;
   status: StatusEmprestimo;
 }
 
+// ✅ CORRIGIDO: livro_id → id_livro, cliente_id → id_cliente
 export interface EmprestimoInput {
-  livro_id: number;
-  cliente_id: number;
+  id_livro: number;           // era 'livro_id'
+  id_cliente: number;         // era 'cliente_id'
   data_devolucao_prevista?: string;
 }
 
@@ -27,8 +30,8 @@ export interface EmprestimoDetalhado extends Emprestimo {
 
 export class EmprestimoModel implements Emprestimo {
   id: number;
-  livro_id: number;
-  cliente_id: number;
+  id_livro: number;           // era 'livro_id'
+  id_cliente: number;         // era 'cliente_id'
   data_emprestimo: Date;
   data_devolucao_prevista?: string;
   data_devolucao?: Date | null;
@@ -36,8 +39,8 @@ export class EmprestimoModel implements Emprestimo {
 
   constructor(dados: Emprestimo) {
     this.id = dados.id;
-    this.livro_id = dados.livro_id;
-    this.cliente_id = dados.cliente_id;
+    this.id_livro = dados.id_livro;           // era 'livro_id'
+    this.id_cliente = dados.id_cliente;       // era 'cliente_id'
     this.data_emprestimo = dados.data_emprestimo;
     this.data_devolucao_prevista = dados.data_devolucao_prevista;
     this.data_devolucao = dados.data_devolucao;

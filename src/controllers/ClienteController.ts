@@ -10,7 +10,30 @@ export class ClienteController {
     console.log(titulo("Cadastrar Cliente"));
     try {
       const nome = await InputHelper.texto("Nome");
+      
+      // ✅ VALIDAÇÃO: nome não pode ser vazio
+      if (!nome || nome.trim().length === 0) {
+        console.log("⚠️  Nome do cliente é obrigatório.");
+        await InputHelper.pausar();
+        return;
+      }
+
       const email = await InputHelper.texto("E-mail");
+      
+      // ✅ VALIDAÇÃO: email não pode ser vazio
+      if (!email || email.trim().length === 0) {
+        console.log("⚠️  E-mail é obrigatório.");
+        await InputHelper.pausar();
+        return;
+      }
+
+      // ✅ VALIDAÇÃO: formato do email (básico)
+      if (!email.includes("@") || !email.includes(".")) {
+        console.log("⚠️  E-mail inválido. Deve conter '@' e um domínio (ex: usuario@email.com).");
+        await InputHelper.pausar();
+        return;
+      }
+
       const telefone = await InputHelper.textoOpcional("Telefone");
 
       const cliente = await this.service.cadastrar({ nome, email, telefone });
@@ -47,6 +70,14 @@ export class ClienteController {
     console.log(titulo("Consultar Cliente por ID"));
     try {
       const id = await InputHelper.inteiro("Informe o ID do cliente");
+      
+      // ✅ VALIDAÇÃO DE NaN
+      if (isNaN(id) || id <= 0) {
+        console.log("⚠️  ID inválido. Deve ser um número positivo.");
+        await InputHelper.pausar();
+        return;
+      }
+
       const cliente = await this.service.buscarPorId(id);
       console.log(linhaSeparadora());
       console.log(`ID: ${cliente.id}`);
@@ -64,10 +95,41 @@ export class ClienteController {
     console.log(titulo("Atualizar Cliente"));
     try {
       const id = await InputHelper.inteiro("Informe o ID do cliente a ser atualizado");
+      
+      // ✅ VALIDAÇÃO DE NaN
+      if (isNaN(id) || id <= 0) {
+        console.log("⚠️  ID inválido. Deve ser um número positivo.");
+        await InputHelper.pausar();
+        return;
+      }
+
       await this.service.buscarPorId(id);
 
       const nome = await InputHelper.texto("Novo nome");
+      
+      // ✅ VALIDAÇÃO: nome não pode ser vazio
+      if (!nome || nome.trim().length === 0) {
+        console.log("⚠️  Nome do cliente é obrigatório.");
+        await InputHelper.pausar();
+        return;
+      }
+
       const email = await InputHelper.texto("Novo e-mail");
+      
+      // ✅ VALIDAÇÃO: email não pode ser vazio
+      if (!email || email.trim().length === 0) {
+        console.log("⚠️  E-mail é obrigatório.");
+        await InputHelper.pausar();
+        return;
+      }
+
+      // ✅ VALIDAÇÃO: formato do email (básico)
+      if (!email.includes("@") || !email.includes(".")) {
+        console.log("⚠️  E-mail inválido. Deve conter '@' e um domínio (ex: usuario@email.com).");
+        await InputHelper.pausar();
+        return;
+      }
+
       const telefone = await InputHelper.textoOpcional("Novo telefone");
 
       const atualizado = await this.service.atualizar(id, { nome, email, telefone });
@@ -82,6 +144,14 @@ export class ClienteController {
     console.log(titulo("Remover Cliente"));
     try {
       const id = await InputHelper.inteiro("Informe o ID do cliente a ser removido");
+      
+      // ✅ VALIDAÇÃO DE NaN
+      if (isNaN(id) || id <= 0) {
+        console.log("⚠️  ID inválido. Deve ser um número positivo.");
+        await InputHelper.pausar();
+        return;
+      }
+
       const cliente = await this.service.buscarPorId(id);
 
       const confirmar = await InputHelper.confirmar(`Remover o cliente "${cliente.nome}"?`);
