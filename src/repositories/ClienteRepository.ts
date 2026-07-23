@@ -54,7 +54,8 @@ export class ClienteRepository {
   }
 
   async possuiEmprestimosVinculados(id: number): Promise<boolean> {
-    const query = `SELECT 1 FROM emprestimos WHERE cliente_id = $1 LIMIT 1;`;
+    // ✅ CORRIGIDO: cliente_id → id_cliente
+    const query = `SELECT 1 FROM emprestimos WHERE id_cliente = $1 LIMIT 1;`;
     const resultado = await pool.query(query, [id]);
     return (resultado.rowCount ?? 0) > 0;
   }
